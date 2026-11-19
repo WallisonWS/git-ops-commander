@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitOps Commander — Git Emergency Recovery, .gitignore &amp; PR Builder</title>
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',system-ui,sans-serif; background:#060a14; color:#f8fafc; min-height:100vh; padding:26px 18px; background-image:radial-gradient(circle at 12% 0%,rgba(249,115,22,0.14),transparent 40%),radial-gradient(circle at 88% 8%,rgba(56,189,248,0.14),transparent 40%); }
+    .wrap { max-width:1140px; margin:0 auto; }
+    .hero { background:linear-gradient(135deg,rgba(249,115,22,0.16),rgba(56,189,248,0.16)); border:1px solid rgba(249,115,22,0.4); border-radius:16px; padding:24px 28px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+    .hero h1 { font-size:1.65rem; font-weight:800; margin-bottom:6px; }
+    .hero p { color:#94a3b8; font-size:0.9rem; max-width:680px; }
+    .btn { background:linear-gradient(135deg,#f97316,#0ea5e9); color:#fff; border:none; padding:9px 16px; border-radius:9px; font-weight:700; cursor:pointer; font-size:0.83rem; text-decoration:none; }
+    .btn-ghost { background:#0f172a; border:1px solid #26334d; color:#e2e8f0; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(450px,1fr)); gap:18px; }
+    .card { background:#0f1626; border:1px solid #23304d; border-radius:14px; padding:20px; margin-bottom:18px; }
+    .card h2 { font-size:0.98rem; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    label { font-size:0.78rem; color:#94a3b8; font-weight:600; display:block; margin-bottom:4px; }
+    input, select { width:100%; background:#080d18; border:1px solid #23304d; color:#f1f5f9; border-radius:8px; padding:9px 11px; font-family:Consolas,monospace; font-size:0.83rem; margin-bottom:10px; }
+    .checks { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .chk { display:inline-flex; align-items:center; gap:6px; background:#080d18; border:1px solid #23304d; padding:6px 11px; border-radius:8px; font-size:0.8rem; cursor:pointer; }
+    pre { background:#080d18; border:1px solid #23304d; border-radius:8px; padding:14px; font-family:Consolas,monospace; font-size:0.8rem; color:#7dd3fc; white-space:pre-wrap; max-height:310px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>🚀 GitOps Commander — Emergency Git Recovery, .gitignore &amp; Commit Studio</h1>
+        <p>Instant safe recipes for every Git emergency (leaked <code>.env</code> history scrub, accidental commit on <code>main</code>, detached HEAD, deleted branch recovery via <code>reflog</code>) + Multi-Stack <code>.gitignore</code> &amp; Conventional Commit builder.</p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="https://github.com/WallisonWS/git-ops-commander" target="_blank" class="btn">⭐ Star on GitHub</a>
+        <a href="https://github.com/WallisonWS" target="_blank" class="btn btn-ghost">@WallisonWS</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>
+          <span>🚨 Git Emergency Recovery Wizard</span>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('gitFixOut').textContent)">📋 Copy Commands</button>
+        </h2>
+        <label>What happened?</label>
+        <select id="gitScenario">
+          <option value="secret">🔥 Committed a .env / API key by mistake (Scrub History!)</option>
+          <option value="main">⚠️ Committed directly to `main` instead of a feature branch</option>
+          <option value="undo">↩️ Undo last commit but KEEP all file edits staged</option>
+          <option value="deleted">♻️ Accidentally deleted a branch (Recover via reflog)</option>
+          <option value="detached">🧭 Stuck in Detached HEAD state with uncommitted/new commits</option>
+          <option value="squash">📦 Squash last N commits into 1 clean PR commit</option>
+        </select>
+        <pre id="gitFixOut"></pre>
+
+        <h2 style="margin-top:16px;">✍️ Conventional Commit Builder</h2>
+        <div style="display:grid; grid-template-columns:130px 1fr; gap:8px;">
+          <select id="ccType"><option>feat</option><option>fix</option><option>sec</option><option>refactor</option><option>perf</option><option>docs</option><option>chore</option></select>
+          <input id="ccScope" placeholder="scope (e.g. auth, firewall, api)" value="security" />
+        </div>
+        <input id="ccMsg" value="enforce strict zero-trust JWT expiration check" />
+        <pre id="ccOut"></pre>
+      </div>
+
+      <div class="card">
+        <h2>
+          <span>🛡️ Smart Multi-Stack .gitignore Composer</span>
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('giOut').textContent)">📋 Copy .gitignore</button>
+        </h2>
+        <div class="checks" id="giChecks">
+          <label class="chk"><input type="checkbox" value="sec" checked /> 🔒 Secrets &amp; .env</label>
+          <label class="chk"><input type="checkbox" value="node" checked /> Node / Next.js</label>
+          <label class="chk"><input type="checkbox" value="python" checked /> Python</label>
+          <label class="chk"><input type="checkbox" value="go" /> Go</label>
+          <label class="chk"><input type="checkbox" value="flutter" /> Flutter / Dart</label>
+          <label class="chk"><input type="checkbox" value="docker" /> Docker / Terraform</label>
+          <label class="chk"><input type="checkbox" value="os" checked /> OS / VSCode / JetBrains</label>
+        </div>
+        <pre id="giOut" style="max-height:430px;"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FIXES = {
+      secret: `# 1) IMMEDIATELY ROTATE/REVOKE the leaked key first!
+# 2) Remove .env from Git tracking & rewrite history cleanly:
+git rm --cached .env
+echo ".env*" >> .gitignore
+git commit -m "chore: untrack .env and add to .gitignore"
+
+# 3) Purge secret from ALL historical commits (recommended: git-filter-repo)
+git filter-repo --invert-paths --path .env
+git push origin --force --all`,
+      main: `# Move commits from main to a new feature branch without losing work:
+git branch feat/my-feature
+git reset --hard origin/main
+git checkout feat/my-feature`,
+      undo: `# Undo the last commit while keeping every edited file staged:
+git reset --soft HEAD~1`,
+      deleted: `# 1) Find the lost commit SHA in Git reflog:
+git reflog -n 15
+
+# 2) Recreate the deleted branch pointing to that SHA:
+git checkout -b recovered-branch <COMMIT_SHA>`,
+      detached: `# Save your detached HEAD work onto a real branch safely:
+git switch -c rescue-detached-work`,
+      squash: `# Squash the last 3 commits into one clean commit:
+git reset --soft HEAD~3
+git commit -m "feat(core): consolidated clean implementation"`
+    };
+
+    const GI = {
+      sec: `# === Secrets & Credentials (NEVER COMMIT) ===\n.env\n.env.*\n!.env.example\n*.pem\n*.key\n*.p12\ncredentials.json\nsecrets.yaml`,
+      node: `# === Node.js / Next.js / TypeScript ===\nnode_modules/\n.next/\nout/\ndist/\nbuild/\nnpm-debug.log*\n.vercel/`,
+      python: `# === Python ===\n__pycache__/\n*.py[cod]\n.venv/\nvenv/\n.pytest_cache/\n.mypy_cache/\n*.egg-info/`,
+      go: `# === Go ===\n*.exe\n*.test\n*.out\nvendor/`,
+      flutter: `# === Flutter / Dart ===\n.dart_tool/\n.flutter-plugins*\nbuild/\nios/Pods/\nandroid/.gradle/`,
+      docker: `# === Docker & Terraform ===\n.terraform/\n*.tfstate\n*.tfstate.*\n*.tfvars\noverride.tf`,
+      os: `# === OS & IDEs ===\n.DS_Store\nThumbs.db\n.vscode/*\n!.vscode/extensions.json\n.idea/`
+    };
+
+    function renderAll() {
+      document.getElementById('gitFixOut').textContent = FIXES[document.getElementById('gitScenario').value];
+      const t = document.getElementById('ccType').value, s = document.getElementById('ccScope').value.trim(), m = document.getElementById('ccMsg').value.trim();
+      document.getElementById('ccOut').textContent = `git commit -m "${t}${s ? `(${s})` : ''}: ${m}"`;
+      const selected = [...document.querySelectorAll('#giChecks input:checked')].map(el => GI[el.value]);
+      document.getElementById('giOut').textContent = selected.join('\n\n');
+    }
+
+    ['gitScenario','ccType','ccScope','ccMsg'].forEach(id => document.getElementById(id).addEventListener('input', renderAll));
+    document.querySelectorAll('#giChecks input').forEach(el => el.addEventListener('change', renderAll));
+    renderAll();
+  </script>
+</body>
+</html>
